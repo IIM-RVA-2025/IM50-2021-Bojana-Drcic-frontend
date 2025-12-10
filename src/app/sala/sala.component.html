@@ -1,0 +1,74 @@
+<mat-card class="card">
+  <div class="card-header">
+    <h2>Sale</h2>
+
+    <button
+      mat-raised-button
+      color="accent"
+      (click)="kapacitet=null; brojRedova=null; bioskopId=null">
+      <mat-icon>add</mat-icon>
+      Nova sala
+    </button>
+  </div>
+
+  <div class="form-row">
+    <mat-form-field appearance="outline" class="field">
+      <mat-label>Kapacitet</mat-label>
+      <input matInput type="number" [(ngModel)]="kapacitet">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="field">
+      <mat-label>Broj redova</mat-label>
+      <input matInput type="number" [(ngModel)]="brojRedova">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="field">
+      <mat-label>Bioskop</mat-label>
+      <mat-select [(ngModel)]="bioskopId">
+        <mat-option *ngFor="let b of bioskopi" [value]="b.id">
+          {{ b.naziv }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" (click)="add()">
+      <mat-icon>save</mat-icon>
+      Dodaj salu
+    </button>
+  </div>
+
+  <table mat-table [dataSource]="sale" class="mat-elevation-z2 full-width">
+
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef> ID </th>
+      <td mat-cell *matCellDef="let s"> {{ s.id }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="kapacitet">
+      <th mat-header-cell *matHeaderCellDef> Kapacitet </th>
+      <td mat-cell *matCellDef="let s"> {{ s.kapacitet }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="brojRedova">
+      <th mat-header-cell *matHeaderCellDef> Broj redova </th>
+      <td mat-cell *matCellDef="let s"> {{ s.brojRedova }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="bioskopId">
+      <th mat-header-cell *matHeaderCellDef> Bioskop ID </th>
+      <td mat-cell *matCellDef="let s"> {{ s.bioskopId }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="akcije">
+      <th mat-header-cell *matHeaderCellDef> Akcije </th>
+      <td mat-cell *matCellDef="let s">
+        <button mat-icon-button color="warn" (click)="delete(s.id)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="['id','kapacitet','brojRedova','bioskopId','akcije']"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['id','kapacitet','brojRedova','bioskopId','akcije'];"></tr>
+  </table>
+</mat-card>

@@ -1,0 +1,31 @@
+.card {
+  margin: 24px;
+  padding: 16px 24px;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.card-header h2 {
+  margin: 0;
+}
+
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.field {
+  min-width: 220px;
+}
+
+.full-width {
+  width: 100%;
+}

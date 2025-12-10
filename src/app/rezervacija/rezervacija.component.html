@@ -1,0 +1,110 @@
+<mat-card class="card">
+  <div class="card-header">
+    <h2>Rezervacije</h2>
+
+    <button
+      mat-raised-button
+      color="accent"
+      (click)="brojOsoba=null; cenaKarte=null; datum=''; filmId=null; salaId=null; placeno=false">
+      <mat-icon>add</mat-icon>
+      Nova rezervacija
+    </button>
+  </div>
+
+  <div class="form-row">
+    <mat-form-field appearance="outline" class="field">
+      <mat-label>Broj osoba</mat-label>
+      <input matInput type="number" [(ngModel)]="brojOsoba">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="field">
+      <mat-label>Cena karte</mat-label>
+      <input matInput type="number" [(ngModel)]="cenaKarte">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="field">
+      <mat-label>Datum</mat-label>
+      <input matInput type="date" [(ngModel)]="datum">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="field">
+      <mat-label>Film</mat-label>
+      <mat-select [(ngModel)]="filmId">
+        <mat-option *ngFor="let f of filmovi" [value]="f.id">
+          {{ f.naziv }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="field">
+      <mat-label>Sala</mat-label>
+      <mat-select [(ngModel)]="salaId">
+        <mat-option *ngFor="let s of sale" [value]="s.id">
+          Sala {{ s.id }} ({{ s.kapacitet }} mesta)
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-checkbox [(ngModel)]="placeno">
+      Plaćeno
+    </mat-checkbox>
+
+    <button mat-raised-button color="primary" (click)="add()">
+      <mat-icon>save</mat-icon>
+      Dodaj rezervaciju
+    </button>
+  </div>
+
+  <table mat-table [dataSource]="rezervacije" class="mat-elevation-z2 full-width">
+
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef> ID </th>
+      <td mat-cell *matCellDef="let r"> {{ r.id }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="brojOsoba">
+      <th mat-header-cell *matHeaderCellDef> Broj osoba </th>
+      <td mat-cell *matCellDef="let r"> {{ r.brojOsoba }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="cenaKarte">
+      <th mat-header-cell *matHeaderCellDef> Cena karte </th>
+      <td mat-cell *matCellDef="let r"> {{ r.cenaKarte }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="datum">
+      <th mat-header-cell *matHeaderCellDef> Datum </th>
+      <td mat-cell *matCellDef="let r"> {{ r.datum }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="filmId">
+      <th mat-header-cell *matHeaderCellDef> Film ID </th>
+      <td mat-cell *matCellDef="let r"> {{ r.filmId }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="salaId">
+      <th mat-header-cell *matHeaderCellDef> Sala ID </th>
+      <td mat-cell *matCellDef="let r"> {{ r.salaId }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="placeno">
+      <th mat-header-cell *matHeaderCellDef> Plaćeno </th>
+      <td mat-cell *matCellDef="let r">
+        <mat-icon *ngIf="r.placeno" color="primary">check</mat-icon>
+        <mat-icon *ngIf="!r.placeno" color="warn">close</mat-icon>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="akcije">
+      <th mat-header-cell *matHeaderCellDef> Akcije </th>
+      <td mat-cell *matCellDef="let r">
+        <button mat-icon-button color="warn" (click)="delete(r.id)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="['id','brojOsoba','cenaKarte','datum','filmId','salaId','placeno','akcije']"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['id','brojOsoba','cenaKarte','datum','filmId','salaId','placeno','akcije'];"></tr>
+  </table>
+</mat-card>

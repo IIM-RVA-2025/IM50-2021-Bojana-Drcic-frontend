@@ -1,0 +1,80 @@
+<mat-card class="card">
+  <div class="card-header">
+    <h2>Filmovi</h2>
+
+    <button
+      mat-raised-button
+      color="accent"
+      (click)="naziv=''; recenzija=null; trajanje=null; zanr=''">
+      <mat-icon>add</mat-icon>
+      Novi film
+    </button>
+  </div>
+
+  <div class="form-row">
+    <mat-form-field appearance="outline" class="field">
+      <mat-label>Naziv</mat-label>
+      <input matInput [(ngModel)]="naziv">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="field">
+      <mat-label>Recenzija (1–10)</mat-label>
+      <input matInput type="number" [(ngModel)]="recenzija">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="field">
+      <mat-label>Trajanje (min)</mat-label>
+      <input matInput type="number" [(ngModel)]="trajanje">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="field">
+      <mat-label>Žanr</mat-label>
+      <input matInput [(ngModel)]="zanr">
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" (click)="add()">
+      <mat-icon>save</mat-icon>
+      Dodaj film
+    </button>
+  </div>
+
+  <table mat-table [dataSource]="filmovi" class="mat-elevation-z2 full-width">
+
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef> ID </th>
+      <td mat-cell *matCellDef="let f"> {{ f.id }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="naziv">
+      <th mat-header-cell *matHeaderCellDef> Naziv </th>
+      <td mat-cell *matCellDef="let f"> {{ f.naziv }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="recenzija">
+      <th mat-header-cell *matHeaderCellDef> Recenzija </th>
+      <td mat-cell *matCellDef="let f"> {{ f.recenzija }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="trajanje">
+      <th mat-header-cell *matHeaderCellDef> Trajanje (min) </th>
+      <td mat-cell *matCellDef="let f"> {{ f.trajanje }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="zanr">
+      <th mat-header-cell *matHeaderCellDef> Žanr </th>
+      <td mat-cell *matCellDef="let f"> {{ f.zanr }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="akcije">
+      <th mat-header-cell *matHeaderCellDef> Akcije </th>
+      <td mat-cell *matCellDef="let f">
+        <button mat-icon-button color="warn" (click)="delete(f.id)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="['id','naziv','recenzija','trajanje','zanr','akcije']"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['id','naziv','recenzija','trajanje','zanr','akcije'];"></tr>
+  </table>
+</mat-card>

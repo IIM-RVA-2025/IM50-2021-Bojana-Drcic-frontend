@@ -77,7 +77,6 @@ update() {
     });
 }
 
-
   // HTML zove (click)="delete(b.id)"
   delete(id: number) {
     this.http.delete(`${this.apiUrl}/${id}`)
