@@ -1,82 +1,138 @@
 <div class="page-container">
-  <mat-card class="card">
-
-    <!-- NASLOV -->
+  <div class="card">
+    
+    <!-- NASLOV SA IKONOM -->
     <div class="card-header">
-      <h2>Bioskopi</h2>
+      <div class="header-content">
+        <div class="icon-wrapper">
+          <span class="material-icons">theaters</span>
+        </div>
+        <div>
+          <h1>Bioskopi</h1>
+          <p class="subtitle">Upravljanje bioskopima</p>
+        </div>
+      </div>
     </div>
 
     <!-- FORMA ZA DODAVANJE / IZMENU -->
-    <div class="form-row">
-      <mat-form-field appearance="outline" class="field">
-        <mat-label>Naziv</mat-label>
-        <input matInput [(ngModel)]="naziv">
-      </mat-form-field>
+    <div class="form-section">
+      <div class="form-row">
+        <div class="input-group">
+          <label class="input-label">
+            <span class="material-icons">label</span>
+            Naziv bioskopa
+          </label>
+          <input type="text" class="custom-input" [(ngModel)]="naziv" placeholder="Unesite naziv bioskopa">
+        </div>
 
-      <mat-form-field appearance="outline" class="field">
-        <mat-label>Adresa</mat-label>
-        <input matInput [(ngModel)]="adresa">
-      </mat-form-field>
+        <div class="input-group">
+          <label class="input-label">
+            <span class="material-icons">location_on</span>
+            Adresa
+          </label>
+          <input type="text" class="custom-input" [(ngModel)]="adresa" placeholder="Unesite adresu">
+        </div>
 
-      <button
-        *ngIf="!editMode"
-        mat-raised-button
-        color="primary"
-        (click)="add()">
-        Dodaj
-      </button>
+        <button 
+          *ngIf="!editMode"
+          class="btn btn-primary"
+          (click)="add()">
+          <span class="material-icons">add_circle</span>
+          Dodaj bioskop
+        </button>
 
-      <button
-        *ngIf="editMode"
-        mat-raised-button
-        color="primary"
-        (click)="update()">
-        Sačuvaj izmene
-      </button>
+        <button 
+          *ngIf="editMode"
+          class="btn btn-success"
+          (click)="update()">
+          <span class="material-icons">check_circle</span>
+          Sačuvaj izmene
+        </button>
+      </div>
+    </div>
+
+    <!-- STATISTIKA -->
+    <div class="stats-section">
+      <div class="stat-card">
+        <span class="material-icons stat-icon">theaters</span>
+        <div class="stat-content">
+          <div class="stat-value">{{ bioskopi.length }}</div>
+          <div class="stat-label">Ukupno bioskopa</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <span class="material-icons stat-icon">location_city</span>
+        <div class="stat-content">
+          <div class="stat-value">5</div>
+          <div class="stat-label">Gradova</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <span class="material-icons stat-icon">event_seat</span>
+        <div class="stat-content">
+          <div class="stat-value">15</div>
+          <div class="stat-label">Sale ukupno</div>
+        </div>
+      </div>
     </div>
 
     <!-- TABELA -->
-    <table mat-table [dataSource]="bioskopi" class="mat-elevation-z2 full-width">
+<div class="table-container">
+  <div class="table-header">
+    <h3>Lista bioskopa</h3>
+    <div class="search-box">
+      <span class="material-icons">search</span>
+      <input type="text" placeholder="Pretraži..." [(ngModel)]="searchText" (input)="onSearchChange()">
+    </div>
+  </div>
 
-      <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef> ID </th>
-        <td mat-cell *matCellDef="let b"> {{ b.id }} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="naziv">
-        <th mat-header-cell *matHeaderCellDef> Naziv </th>
-        <td mat-cell *matCellDef="let b"> {{ b.naziv }} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="adresa">
-        <th mat-header-cell *matHeaderCellDef> Adresa </th>
-        <td mat-cell *matCellDef="let b"> {{ b.adresa }} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="akcije">
-        <th mat-header-cell *matHeaderCellDef> Akcije </th>
-        <td mat-cell *matCellDef="let b">
-          <button
-            mat-stroked-button
-            color="primary"
-            class="action-btn"
-            (click)="startEdit(b)">
-            Izmeni
-          </button>
-
-          <button
-            mat-stroked-button
-            color="warn"
-            class="action-btn"
-            (click)="confirmDelete(b.id)">
-            Obriši
-          </button>
+  <table class="custom-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Naziv</th>
+        <th>Adresa</th>
+        <th>Akcije</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let b of getFilteredBioskopi()">
+        <td>
+          <span class="id-badge">{{ b.id }}</span>
         </td>
-      </ng-container>
+        <td>
+          <div class="cinema-name">
+            <span class="material-icons cinema-icon">theaters</span>
+            {{ b.naziv }}
+          </div>
+        </td>
+        <td>
+          <div class="address">
+            <span class="material-icons location-icon">location_on</span>
+            {{ b.adresa }}
+          </div>
+        </td>
+        <td>
+          <div class="action-buttons">
+            <button
+              class="btn-icon btn-edit"
+              (click)="startEdit(b)"
+              title="Izmeni">
+              <span class="material-icons">edit</span>
+            </button>
 
-      <tr mat-header-row *matHeaderRowDef="['id','naziv','adresa','akcije']"></tr>
-      <tr mat-row *matRowDef="let row; columns: ['id','naziv','adresa','akcije'];"></tr>
-    </table>
+            <button
+              class="btn-icon btn-delete"
+              (click)="confirmDelete(b.id)"
+              title="Obriši">
+              <span class="material-icons">delete</span>
+            </button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
-  </mat-card>
+  </div>
 </div>

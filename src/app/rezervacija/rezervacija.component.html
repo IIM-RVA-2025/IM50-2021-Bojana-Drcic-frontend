@@ -1,110 +1,218 @@
-<mat-card class="card">
-  <div class="card-header">
-    <h2>Rezervacije</h2>
+<div class="page-container">
+  <div class="card">
+    
+    <!-- NASLOV SA IKONOM -->
+    <div class="card-header">
+      <div class="header-content">
+        <div class="icon-wrapper">
+          <span class="material-icons">confirmation_number</span>
+        </div>
+        <div>
+          <h1>Rezervacije</h1>
+          <p class="subtitle">Upravljanje rezervacijama</p>
+        </div>
+      </div>
+    </div>
 
-    <button
-      mat-raised-button
-      color="accent"
-      (click)="brojOsoba=null; cenaKarte=null; datum=''; filmId=null; salaId=null; placeno=false">
-      <mat-icon>add</mat-icon>
-      Nova rezervacija
-    </button>
-  </div>
+    <!-- FORMA ZA DODAVANJE -->
+    <div class="form-section">
+      <div class="form-row">
+        <div class="input-group">
+          <label class="input-label">
+            <span class="material-icons">group</span>
+            Broj osoba
+          </label>
+          <input type="number" class="custom-input" [(ngModel)]="brojOsoba" placeholder="Broj osoba">
+        </div>
 
-  <div class="form-row">
-    <mat-form-field appearance="outline" class="field">
-      <mat-label>Broj osoba</mat-label>
-      <input matInput type="number" [(ngModel)]="brojOsoba">
-    </mat-form-field>
+        <div class="input-group">
+          <label class="input-label">
+            <span class="material-icons">payments</span>
+            Cena karte
+          </label>
+          <input type="number" class="custom-input" [(ngModel)]="cenaKarte" placeholder="Cena u dinarima">
+        </div>
 
-    <mat-form-field appearance="outline" class="field">
-      <mat-label>Cena karte</mat-label>
-      <input matInput type="number" [(ngModel)]="cenaKarte">
-    </mat-form-field>
+        <div class="input-group">
+          <label class="input-label">
+            <span class="material-icons">calendar_today</span>
+            Datum
+          </label>
+          <input type="date" class="custom-input" [(ngModel)]="datum">
+        </div>
 
-    <mat-form-field appearance="outline" class="field">
-      <mat-label>Datum</mat-label>
-      <input matInput type="date" [(ngModel)]="datum">
-    </mat-form-field>
+        <div class="input-group">
+          <label class="input-label">
+            <span class="material-icons">movie</span>
+            Film
+          </label>
+          <select class="custom-input" [(ngModel)]="filmId">
+            <option [value]="null" disabled selected>Izaberite film</option>
+            <option *ngFor="let f of filmovi" [value]="f.id">
+              {{ f.naziv }}
+            </option>
+          </select>
+        </div>
 
-    <mat-form-field appearance="outline" class="field">
-      <mat-label>Film</mat-label>
-      <mat-select [(ngModel)]="filmId">
-        <mat-option *ngFor="let f of filmovi" [value]="f.id">
-          {{ f.naziv }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+        <div class="input-group">
+          <label class="input-label">
+            <span class="material-icons">event_seat</span>
+            Sala
+          </label>
+          <select class="custom-input" [(ngModel)]="salaId">
+            <option [value]="null" disabled selected>Izaberite salu</option>
+            <option *ngFor="let s of sale" [value]="s.id">
+              Sala {{ s.id }} ({{ s.kapacitet }} mesta)
+            </option>
+          </select>
+        </div>
 
-    <mat-form-field appearance="outline" class="field">
-      <mat-label>Sala</mat-label>
-      <mat-select [(ngModel)]="salaId">
-        <mat-option *ngFor="let s of sale" [value]="s.id">
-          Sala {{ s.id }} ({{ s.kapacitet }} mesta)
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+        <div class="input-group checkbox-group">
+          <label class="checkbox-label">
+            <input type="checkbox" class="custom-checkbox" [(ngModel)]="placeno">
+            <span class="checkbox-text">
+              <span class="material-icons">check_circle</span>
+              Plaćeno
+            </span>
+          </label>
+        </div>
 
-    <mat-checkbox [(ngModel)]="placeno">
-      Plaćeno
-    </mat-checkbox>
-
-    <button mat-raised-button color="primary" (click)="add()">
-      <mat-icon>save</mat-icon>
-      Dodaj rezervaciju
-    </button>
-  </div>
-
-  <table mat-table [dataSource]="rezervacije" class="mat-elevation-z2 full-width">
-
-    <ng-container matColumnDef="id">
-      <th mat-header-cell *matHeaderCellDef> ID </th>
-      <td mat-cell *matCellDef="let r"> {{ r.id }} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="brojOsoba">
-      <th mat-header-cell *matHeaderCellDef> Broj osoba </th>
-      <td mat-cell *matCellDef="let r"> {{ r.brojOsoba }} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="cenaKarte">
-      <th mat-header-cell *matHeaderCellDef> Cena karte </th>
-      <td mat-cell *matCellDef="let r"> {{ r.cenaKarte }} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="datum">
-      <th mat-header-cell *matHeaderCellDef> Datum </th>
-      <td mat-cell *matCellDef="let r"> {{ r.datum }} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="filmId">
-      <th mat-header-cell *matHeaderCellDef> Film ID </th>
-      <td mat-cell *matCellDef="let r"> {{ r.filmId }} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="salaId">
-      <th mat-header-cell *matHeaderCellDef> Sala ID </th>
-      <td mat-cell *matCellDef="let r"> {{ r.salaId }} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="placeno">
-      <th mat-header-cell *matHeaderCellDef> Plaćeno </th>
-      <td mat-cell *matCellDef="let r">
-        <mat-icon *ngIf="r.placeno" color="primary">check</mat-icon>
-        <mat-icon *ngIf="!r.placeno" color="warn">close</mat-icon>
-      </td>
-    </ng-container>
-
-    <ng-container matColumnDef="akcije">
-      <th mat-header-cell *matHeaderCellDef> Akcije </th>
-      <td mat-cell *matCellDef="let r">
-        <button mat-icon-button color="warn" (click)="delete(r.id)">
-          <mat-icon>delete</mat-icon>
+        <button 
+          *ngIf="!editMode"
+          class="btn btn-primary"
+          (click)="add()">
+          <span class="material-icons">add_circle</span>
+          Dodaj rezervaciju
         </button>
-      </td>
-    </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="['id','brojOsoba','cenaKarte','datum','filmId','salaId','placeno','akcije']"></tr>
-    <tr mat-row *matRowDef="let row; columns: ['id','brojOsoba','cenaKarte','datum','filmId','salaId','placeno','akcije'];"></tr>
-  </table>
-</mat-card>
+        <button 
+          *ngIf="editMode"
+          class="btn btn-success"
+          (click)="update()">
+          <span class="material-icons">check_circle</span>
+          Sačuvaj izmene
+        </button>
+
+        <button 
+          *ngIf="editMode"
+          class="btn btn-secondary"
+          (click)="cancelEdit()">
+          <span class="material-icons">cancel</span>
+          Otkaži
+        </button>
+      </div>
+    </div>
+
+    <!-- STATISTIKA -->
+    <div class="stats-section">
+      <div class="stat-card">
+        <span class="material-icons stat-icon">confirmation_number</span>
+        <div class="stat-content">
+          <div class="stat-value">{{ rezervacije.length }}</div>
+          <div class="stat-label">Ukupno rezervacija</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <span class="material-icons stat-icon">payments</span>
+        <div class="stat-content">
+          <div class="stat-value">{{ getTotalRevenue() }}</div>
+          <div class="stat-label">Ukupan prihod (RSD)</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <span class="material-icons stat-icon">group</span>
+        <div class="stat-content">
+          <div class="stat-value">{{ getTotalPeople() }}</div>
+          <div class="stat-label">Ukupno ljudi</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TABELA -->
+    <div class="table-container">
+      <div class="table-header">
+        <h3>Lista rezervacija</h3>
+        <div class="search-box">
+          <span class="material-icons">search</span>
+          <input type="text" placeholder="Pretraži..." [(ngModel)]="searchText" (input)="onSearchChange()">
+        </div>
+      </div>
+
+      <table class="custom-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Broj osoba</th>
+            <th>Cena karte</th>
+            <th>Datum</th>
+            <th>Film</th>
+            <th>Sala</th>
+            <th>Status</th>
+            <th>Akcije</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let r of getFilteredRezervacije()">
+            <td>
+              <span class="id-badge">{{ r.id }}</span>
+            </td>
+            <td>
+              <div class="people">
+                <span class="material-icons people-icon">group</span>
+                {{ r.brojOsoba }} osoba
+              </div>
+            </td>
+            <td>
+              <div class="price">
+                <span class="material-icons price-icon">payments</span>
+                {{ r.cenaKarte }} RSD
+              </div>
+            </td>
+            <td>
+              <div class="date">
+                <span class="material-icons date-icon">calendar_today</span>
+                {{ r.datum }}
+              </div>
+            </td>
+            <td>
+              <div class="cinema-name">
+                <span class="material-icons cinema-icon">movie</span>
+                {{ getFilmName(r.filmId) }}
+              </div>
+            </td>
+            <td>
+              <div class="sala">
+                <span class="material-icons sala-icon">event_seat</span>
+                Sala {{ r.salaId }}
+              </div>
+            </td>
+            <td>
+              <span class="status-badge" [class.paid]="r.placeno" [class.unpaid]="!r.placeno">
+                <span class="material-icons">{{ r.placeno ? 'check_circle' : 'cancel' }}</span>
+                {{ r.placeno ? 'Plaćeno' : 'Nije plaćeno' }}
+              </span>
+            </td>
+            <td>
+              <div class="action-buttons">
+                <button
+                  class="btn-icon btn-edit"
+                  (click)="startEdit(r)"
+                  title="Izmeni">
+                  <span class="material-icons">edit</span>
+                </button>
+
+                <button
+                  class="btn-icon btn-delete"
+                  (click)="confirmDelete(r.id)"
+                  title="Obriši">
+                  <span class="material-icons">delete</span>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>

@@ -1,80 +1,173 @@
-<mat-card class="card">
-  <div class="card-header">
-    <h2>Filmovi</h2>
+<div class="page-container">
+  <div class="card">
+    
+    <!-- NASLOV SA IKONOM -->
+    <div class="card-header">
+      <div class="header-content">
+        <div class="icon-wrapper">
+          <span class="material-icons">movie</span>
+        </div>
+        <div>
+          <h1>Filmovi</h1>
+          <p class="subtitle">Upravljanje filmovima</p>
+        </div>
+      </div>
+    </div>
 
-    <button
-      mat-raised-button
-      color="accent"
-      (click)="naziv=''; recenzija=null; trajanje=null; zanr=''">
-      <mat-icon>add</mat-icon>
-      Novi film
-    </button>
-  </div>
+    <!-- FORMA ZA DODAVANJE -->
+    <div class="form-section">
+      <div class="form-row">
+        <div class="input-group">
+          <label class="input-label">
+            <span class="material-icons">movie_filter</span>
+            Naziv filma
+          </label>
+          <input type="text" class="custom-input" [(ngModel)]="naziv" placeholder="Unesite naziv filma">
+        </div>
 
-  <div class="form-row">
-    <mat-form-field appearance="outline" class="field">
-      <mat-label>Naziv</mat-label>
-      <input matInput [(ngModel)]="naziv">
-    </mat-form-field>
+        <div class="input-group">
+          <label class="input-label">
+            <span class="material-icons">star</span>
+            Recenzija (1-10)
+          </label>
+          <input type="number" class="custom-input" [(ngModel)]="recenzija" placeholder="Ocena" min="1" max="10">
+        </div>
 
-    <mat-form-field appearance="outline" class="field">
-      <mat-label>Recenzija (1–10)</mat-label>
-      <input matInput type="number" [(ngModel)]="recenzija">
-    </mat-form-field>
+        <div class="input-group">
+          <label class="input-label">
+            <span class="material-icons">schedule</span>
+            Trajanje (min)
+          </label>
+          <input type="number" class="custom-input" [(ngModel)]="trajanje" placeholder="Minuti">
+        </div>
 
-    <mat-form-field appearance="outline" class="field">
-      <mat-label>Trajanje (min)</mat-label>
-      <input matInput type="number" [(ngModel)]="trajanje">
-    </mat-form-field>
+        <div class="input-group">
+          <label class="input-label">
+            <span class="material-icons">category</span>
+            Žanr
+          </label>
+          <input type="text" class="custom-input" [(ngModel)]="zanr" placeholder="Akcija, Drama...">
+        </div>
 
-    <mat-form-field appearance="outline" class="field">
-      <mat-label>Žanr</mat-label>
-      <input matInput [(ngModel)]="zanr">
-    </mat-form-field>
-
-    <button mat-raised-button color="primary" (click)="add()">
-      <mat-icon>save</mat-icon>
-      Dodaj film
-    </button>
-  </div>
-
-  <table mat-table [dataSource]="filmovi" class="mat-elevation-z2 full-width">
-
-    <ng-container matColumnDef="id">
-      <th mat-header-cell *matHeaderCellDef> ID </th>
-      <td mat-cell *matCellDef="let f"> {{ f.id }} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="naziv">
-      <th mat-header-cell *matHeaderCellDef> Naziv </th>
-      <td mat-cell *matCellDef="let f"> {{ f.naziv }} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="recenzija">
-      <th mat-header-cell *matHeaderCellDef> Recenzija </th>
-      <td mat-cell *matCellDef="let f"> {{ f.recenzija }} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="trajanje">
-      <th mat-header-cell *matHeaderCellDef> Trajanje (min) </th>
-      <td mat-cell *matCellDef="let f"> {{ f.trajanje }} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="zanr">
-      <th mat-header-cell *matHeaderCellDef> Žanr </th>
-      <td mat-cell *matCellDef="let f"> {{ f.zanr }} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="akcije">
-      <th mat-header-cell *matHeaderCellDef> Akcije </th>
-      <td mat-cell *matCellDef="let f">
-        <button mat-icon-button color="warn" (click)="delete(f.id)">
-          <mat-icon>delete</mat-icon>
+        <button 
+          *ngIf="!editMode"
+          class="btn btn-primary"
+          (click)="add()">
+          <span class="material-icons">add_circle</span>
+          Dodaj film
         </button>
-      </td>
-    </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="['id','naziv','recenzija','trajanje','zanr','akcije']"></tr>
-    <tr mat-row *matRowDef="let row; columns: ['id','naziv','recenzija','trajanje','zanr','akcije'];"></tr>
-  </table>
-</mat-card>
+        <button 
+          *ngIf="editMode"
+          class="btn btn-success"
+          (click)="update()">
+          <span class="material-icons">check_circle</span>
+          Sačuvaj izmene
+        </button>
+
+        <button 
+          *ngIf="editMode"
+          class="btn btn-secondary"
+          (click)="cancelEdit()">
+          <span class="material-icons">cancel</span>
+          Otkaži
+        </button>
+      </div>
+    </div>
+
+    <!-- STATISTIKA -->
+    <div class="stats-section">
+      <div class="stat-card">
+        <span class="material-icons stat-icon">movie</span>
+        <div class="stat-content">
+          <div class="stat-value">{{ filmovi.length }}</div>
+          <div class="stat-label">Ukupno filmova</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <span class="material-icons stat-icon">star</span>
+        <div class="stat-content">
+          <div class="stat-value">{{ getAverageRating() }}</div>
+          <div class="stat-label">Prosečna ocena</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <span class="material-icons stat-icon">access_time</span>
+        <div class="stat-content">
+          <div class="stat-value">{{ getTotalDuration() }}</div>
+          <div class="stat-label">Ukupno minuta</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TABELA -->
+    <div class="table-container">
+      <div class="table-header">
+        <h3>Lista filmova</h3>
+        <div class="search-box">
+          <span class="material-icons">search</span>
+          <input type="text" placeholder="Pretraži..." [(ngModel)]="searchText" (input)="onSearchChange()">
+        </div>
+      </div>
+
+      <table class="custom-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Naziv</th>
+            <th>Recenzija</th>
+            <th>Trajanje</th>
+            <th>Žanr</th>
+            <th>Akcije</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let f of getFilteredFilmovi()">
+            <td>
+              <span class="id-badge">{{ f.id }}</span>
+            </td>
+            <td>
+              <div class="cinema-name">
+                <span class="material-icons cinema-icon">movie</span>
+                {{ f.naziv }}
+              </div>
+            </td>
+            <td>
+              <div class="rating">
+                <span class="material-icons rating-icon">star</span>
+                {{ f.recenzija }}/10
+              </div>
+            </td>
+            <td>
+              <div class="duration">
+                <span class="material-icons duration-icon">schedule</span>
+                {{ f.trajanje }} min
+              </div>
+            </td>
+            <td>
+              <span class="genre-badge">{{ f.zanr }}</span>
+            </td>
+            <td>
+              <div class="action-buttons">
+                <button
+                  class="btn-icon btn-edit"
+                  (click)="startEdit(f)"
+                  title="Izmeni">
+                  <span class="material-icons">edit</span>
+                </button>
+
+                <button
+                  class="btn-icon btn-delete"
+                  (click)="confirmDelete(f.id)"
+                  title="Obriši">
+                  <span class="material-icons">delete</span>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
